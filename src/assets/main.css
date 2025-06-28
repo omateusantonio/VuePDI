@@ -2,8 +2,8 @@
 @import "tailwindcss-primeui";
 
 #app {
-  max-width: 80%;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+	max-width: 80%;
+	margin: 0 auto;
+	padding: 2rem;
+	font-weight: normal;
 }
