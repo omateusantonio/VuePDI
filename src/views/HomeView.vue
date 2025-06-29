@@ -106,12 +106,11 @@
 			chamadoService
 				.obterPorId(novoValor.id)
 				.then((dados) => {
+					dados.categoria = novoValor.categoria
 					chamadoParaEditar.value = dados
 					dialogVisivel.value = true
 				})
-				.catch((erro) =>
-					console.error(`Erro ao obter chamado com ID ${novoValor.id}:`, erro)
-				)
+				.catch((erro) => console.error(`Erro ao obter chamado com ID ${novoValor.id}:`, erro))
 		}
 	})
 
@@ -179,6 +178,13 @@
 		}
 	}
 
+	const _atualizarCategoriaEmMemoria = (chamadoEditado) => {
+		const index = listaDeChamados.value.findIndex(c => c.id === chamadoEditado.id)
+		if (index > -1) {
+			listaDeChamados.value[index].categoria = chamadoEditado.categoria
+		}
+	}
+
 	const _criarChamado = (chamadoEditado) => {
 		const objetoParaCriar = _montarObjetoChamado(chamadoEditado)
 
@@ -197,7 +203,10 @@
 
 		chamadoService
 			.atualizar(chamadoEditado.id, objetoParaAtualizar)
-			.then(() => _obterTodosOsChamados())
+			.then(() => {
+				_atualizarCategoriaEmMemoria(chamadoEditado)
+				_obterTodosOsChamados()
+			})
 			.catch((erro) => console.error("Erro ao atualizar chamado:", erro))
 			.finally(() => {
 				dialogVisivel.value = false
