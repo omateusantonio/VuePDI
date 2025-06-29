@@ -1,16 +1,47 @@
 <template>
 	<div class="">
+		<div class="flex justify-start mb-4">
+			<Button
+				label="Novo" />
+			<Button
+				label="Remover selecionados"
+				severity="danger"
+				class="ml-2" />
+		</div>
 		<DataTable
+			selectionMode="single"
+			v-model:selection="chamadoSelecionado"
+			dataKey="id"
 			:value="listaDeChamados"
-			paginator
 			:rows="15"
 			:rowsPerPageOptions="[5, 10, 20, 50]"
 			tableStyle="min-width: 50rem"
+			paginator
 		>
-			<Column field="nomeUsuario" header="Solicitante" style="width: 25%"></Column>
-			<Column field="usuario" header="Nome de usuário" style="width: 25%"></Column>
-			<Column field="dataPedido" header="Data da solicitação" style="width: 25%"></Column>
-			<Column field="categoria" header="Categoria do chamado" style="width: 25%"></Column>
+			<Column
+				field="nomeUsuario"
+				header="Solicitante"
+				style="width: 20%"></Column>
+			<Column
+				field="usuario"
+				header="Nome de usuário"
+				style="width: 20%"></Column>
+			<Column
+				field="dataPedido"
+				header="Data da solicitação"
+				style="width: 20%"></Column>
+			<Column
+				field="categoria"
+				header="Categoria"
+				style="width: 20%"></Column>
+			<Column
+                field="descricao"
+                header="Descrição"
+                style="width: 20%">
+                <template #body="slotProps">
+                    {{ slotProps.data.descricao.substring(0, 50) }}{{ slotProps.data.descricao.length > 50 ? "..." : "" }}
+                </template>
+            </Column>
 		</DataTable>
 	</div>
 </template>
@@ -18,10 +49,12 @@
 <script setup>
 	import DataTable from "primevue/datatable"
 	import Column from "primevue/column"
+	import Button from "primevue/button"
 	import chamadoService from "@/common/services/chamadoService"
 	import { ref, onMounted } from "vue"
 
 	const listaDeChamados = ref([])
+	const chamadoSelecionado = ref(null)
 
 	onMounted(() => {
 		_obterTodosOsChamados()

@@ -1,6 +1,6 @@
 import apiService from "@/common/api.js"
 
-const urlBase = "https://686036b8c55df67558a07105.mockapi.io/v1/chamados"
+const urlBase = "https://68615b728e7486408445b8fe.mockapi.io/v1/Chamados"
 
 const chamadoService = {
 	async obterTodos() {
