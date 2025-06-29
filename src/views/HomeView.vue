@@ -110,7 +110,9 @@
 					chamadoParaEditar.value = dados
 					dialogVisivel.value = true
 				})
-				.catch((erro) => console.error(`Erro ao obter chamado com ID ${novoValor.id}:`, erro))
+				.catch((erro) =>
+					console.error(`Erro ao obter chamado com ID ${novoValor.id}:`, erro)
+				)
 		}
 	})
 
@@ -179,7 +181,7 @@
 	}
 
 	const _atualizarCategoriaEmMemoria = (chamadoEditado) => {
-		const index = listaDeChamados.value.findIndex(c => c.id === chamadoEditado.id)
+		const index = listaDeChamados.value.findIndex((c) => c.id === chamadoEditado.id)
 		if (index > -1) {
 			listaDeChamados.value[index].categoria = chamadoEditado.categoria
 		}
