@@ -2,13 +2,13 @@
 	<Dialog
 		v-model:visible="dialogVisivel"
 		:style="{ width: '450px' }"
-		header="Detalhes do Chamado"
+		header="Detalhes do chamado"
 		:modal="true"
 		@hide="fecharDialog"
 	>
 		<div class="flex flex-col gap-4">
 			<div class="flex flex-col gap-2">
-				<label>Nome do Solicitante:</label>
+				<label>Nome do solicitante:</label>
 				<InputText
 					v-model.trim="chamadoEditado.nomeUsuario"
 					required="true"

@@ -1,5 +1,9 @@
 <template>
 	<div>
+		<div class="mb-6">
+			<h1 class="text-3xl font-bold">CRUD de Chamados</h1>
+		</div>
+
 		<div class="flex justify-start mb-4">
 			<Button
 				label="Novo"
@@ -19,6 +23,7 @@
 			removableSort
 			sortField="dataPedido"
 			:sortOrder="-1"
+			:loading="carregandoDados"
 		>
 			<Column
 				sortable
@@ -103,13 +108,13 @@
 	import * as toastHelper from "@/common/utils/toastHelper"
 	import { ref, onMounted, watch, computed } from "vue"
 
-
 	const listaDeChamados = ref([])
 	const chamadoSelecionado = ref(null)
 	const dialogVisivel = ref(false)
 	const chamadoParaEditar = ref({})
 	const dialogConfirmacaoVisivel = ref(false)
 	const chamadoParaExcluir = ref(null)
+	const carregandoDados = ref(false)
 
 	const categoriasParaSelect = computed(() => {
 		const categorias = _obterCategoriasDeChamado()
@@ -143,6 +148,7 @@
 	onMounted(() => _obterTodosOsChamados())
 
 	const _obterTodosOsChamados = () => {
+		carregandoDados.value = true
 		chamadoService
 			.obterTodos()
 			.then((dados) => {
@@ -150,6 +156,9 @@
 				listaDeChamados.value = dados
 			})
 			.catch((erro) => toastHelper.erroApi("Erro ao obter chamados:", erro))
+			.finally(() => {
+				carregandoDados.value = false
+			})
 	}
 
 	const _obterCategoriasDeChamado = () => {
