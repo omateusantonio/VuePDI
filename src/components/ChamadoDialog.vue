@@ -19,13 +19,13 @@
 
 			<div class="flex flex-col gap-2">
 				<label>Categoria:</label>
-				<Dropdown
+				<Select
 					v-model="chamadoEditado.categoria"
 					:options="categorias"
 					optionLabel="label"
 					optionValue="value"
 					placeholder="Selecione uma categoria"
-				></Dropdown>
+				></Select>
 			</div>
 
 			<div class="flex flex-col gap-2">
@@ -53,11 +53,11 @@
 </template>
 
 <script setup>
-	import { ref, watch, defineProps, defineEmits } from "vue"
+	import { ref, watch } from "vue"
 	import Dialog from "primevue/dialog"
 	import InputText from "primevue/inputtext"
 	import TextArea from "primevue/textarea"
-	import Dropdown from "primevue/dropdown"
+	import Select from "primevue/select"
 	import Button from "primevue/button"
 
 	const props = defineProps({

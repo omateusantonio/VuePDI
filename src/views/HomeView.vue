@@ -58,9 +58,13 @@
 	})
 
 	watch(chamadoSelecionado, (novoValor) => {
-		if (novoValor) {
-			chamadoParaEditar.value = { ...novoValor }
-			dialogVisivel.value = true
+		if (novoValor && novoValor.id) {
+			chamadoService.obterPorId(novoValor.id)
+				.then(dados => {
+					chamadoParaEditar.value = dados;
+					dialogVisivel.value = true;
+				})
+				.catch(erro => console.error(`Erro ao obter chamado com ID ${novoValor.id}:`, erro));
 		}
 	})
 
@@ -78,7 +82,6 @@
 		chamadoService
 			.obterTodos()
 			.then((dados) => {
-				_adicionarIdAosChamados(dados)
 				_adicionarCategoriaAosChamados(dados)
 				_formatarDataChamados(dados)
 				listaDeChamados.value = dados
@@ -94,12 +97,6 @@
 			4: "Desenvolvimento",
 			5: "Outros"
 		}
-	}
-
-	const _adicionarIdAosChamados = (chamados) => {
-		chamados.forEach((chamado, index) => {
-			chamado.id = index + 1
-		})
 	}
 
 	const _adicionarCategoriaAosChamados = (chamados) => {
@@ -126,22 +123,42 @@
 		dialogVisivel.value = true
 	}
 
-	const salvarChamado = (chamadoEditado) => {
-		const index = listaDeChamados.value.findIndex((c) => c.id === chamadoEditado.id)
-
-		if (index > -1) {
-			listaDeChamados.value[index] = chamadoEditado
-		} else {
-			chamadoEditado.id = listaDeChamados.value.length + 1
-			chamadoEditado.dataPedido = new Date().toLocaleDateString("pt-BR", {
-				year: "numeric",
-				month: "2-digit",
-				day: "2-digit"
-			})
-			listaDeChamados.value.push(chamadoEditado)
+	const _montarObjetoChamado = (chamadoEditado, ehEdicao = false) => {
+		return {
+			nomeUsuario: chamadoEditado.nomeUsuario,
+			usuario: chamadoEditado.usuario,
+			descricao: chamadoEditado.descricao,
+			dataPedido: ehEdicao ? chamadoEditado.dataPedido : new Date().toISOString()
 		}
+	}
 
-		dialogVisivel.value = false
-		chamadoSelecionado.value = null
+	const _criarChamado = (chamadoEditado) => {
+		const objetoParaCriar = _montarObjetoChamado(chamadoEditado)
+
+		chamadoService.criar(objetoParaCriar)
+			.then(() => _obterTodosOsChamados())
+			.catch(erro => console.error("Erro ao criar chamado:", erro))
+			.finally(() => {
+				dialogVisivel.value = false
+				chamadoSelecionado.value = null
+			})
+	}
+
+	const _atualizarChamado = (chamadoEditado) => {
+		const objetoParaAtualizar = _montarObjetoChamado(chamadoEditado, true)
+
+		chamadoService.atualizar(chamadoEditado.id, objetoParaAtualizar)
+			.then(() => _obterTodosOsChamados())
+			.catch(erro => console.error("Erro ao atualizar chamado:", erro))
+			.finally(() => {
+				dialogVisivel.value = false
+				chamadoSelecionado.value = null
+			})
+	}
+
+	const salvarChamado = (chamadoEditado) => {
+		if (chamadoEditado.id) return _atualizarChamado(chamadoEditado)
+
+		_criarChamado(chamadoEditado)
 	}
 </script>
