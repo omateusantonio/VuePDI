@@ -1,5 +1,6 @@
 import "./assets/main.css"
 import PrimeVue from "primevue/config"
+import Material from "@primeuix/themes/material"
 
 import { createApp } from "vue"
 import App from "./App.vue"
@@ -9,9 +10,9 @@ const app = createApp(App)
 
 app.use(router)
 app.use(PrimeVue, {
-	theme: {
-		preset: "Material"
-	}
+    theme: {
+        preset: Material
+    }
 })
 
 app.mount("#app")
