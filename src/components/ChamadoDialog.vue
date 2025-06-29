@@ -9,12 +9,18 @@
 		<div class="flex flex-col gap-4">
 			<div class="flex flex-col gap-2">
 				<label>Nome do Solicitante:</label>
-				<InputText v-model.trim="chamadoEditado.nomeUsuario" required="true" />
+				<InputText
+					v-model.trim="chamadoEditado.nomeUsuario"
+					required="true"
+				/>
 			</div>
 
 			<div class="flex flex-col gap-2">
-				<label for="usuario">Usuário:</label>
-				<InputText v-model.trim="chamadoEditado.usuario" required="true" />
+				<label>Usuário:</label>
+				<InputText
+					v-model.trim="chamadoEditado.usuario"
+					required="true"
+				/>
 			</div>
 
 			<div class="flex flex-col gap-2">
@@ -25,7 +31,7 @@
 					optionLabel="label"
 					optionValue="value"
 					placeholder="Selecione uma categoria"
-				></Select>
+				/>
 			</div>
 
 			<div class="flex flex-col gap-2">
@@ -41,7 +47,12 @@
 		</div>
 
 		<template #footer>
-			<Button label="Fechar" icon="pi pi-times" class="p-button-text" @click="fecharDialog" />
+			<Button
+				label="Fechar"
+				icon="pi pi-times"
+				class="p-button-text"
+				@click="fecharDialog"
+			/>
 			<Button
 				:label="chamadoEditado.id ? 'Atualizar' : 'Salvar'"
 				icon="pi pi-check"

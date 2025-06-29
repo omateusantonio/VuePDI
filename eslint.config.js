@@ -24,9 +24,30 @@ export default defineConfig([
 	...pluginVue.configs["flat/essential"],
 	skipFormatting,
 	{
-		name: "app/custo-rules",
+		name: "app/custom-rules",
 		rules: {
-			"padded-blocks": ["error", "never"]
+			"padded-blocks": ["error", "never"],
+			"vue/max-attributes-per-line": [
+				"error",
+				{
+					singleline: 1,
+					multiline: 1
+				}
+			],
+			"vue/first-attribute-linebreak": [
+				"error",
+				{
+					singleline: "ignore",
+					multiline: "below"
+				}
+			],
+			"vue/html-closing-bracket-newline": [
+				"error",
+				{
+					singleline: "never",
+					multiline: "always"
+				}
+			]
 		}
 	}
 ])

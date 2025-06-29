@@ -6,5 +6,7 @@
 	"trailingComma": "none",
 	"vueIndentScriptAndStyle": true,
 	"useTabs": true,
-	"endOfLine": "lf"
+	"endOfLine": "lf",
+	"singleAttributePerLine": true,
+	"bracketSameLine": false
 }
