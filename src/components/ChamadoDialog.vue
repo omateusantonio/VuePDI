@@ -12,7 +12,15 @@
 				<InputText
 					v-model.trim="chamadoEditado.nomeUsuario"
 					required="true"
+					:class="{ 'p-invalid': erros.nomeUsuario }"
 				/>
+				<Message
+					v-if="erros.nomeUsuario"
+					severity="error"
+					:closable="false"
+				>
+					O nome do solicitante é obrigatório
+				</Message>
 			</div>
 
 			<div class="flex flex-col gap-2">
@@ -20,7 +28,15 @@
 				<InputText
 					v-model.trim="chamadoEditado.usuario"
 					required="true"
+					:class="{ 'p-invalid': erros.usuario }"
 				/>
+				<Message
+					v-if="erros.usuario"
+					severity="error"
+					:closable="false"
+				>
+					O usuário é obrigatório
+				</Message>
 			</div>
 
 			<div class="flex flex-col gap-2">
@@ -31,7 +47,15 @@
 					optionLabel="label"
 					optionValue="value"
 					placeholder="Selecione uma categoria"
+					:class="{ 'p-invalid': erros.categoria }"
 				/>
+				<Message
+					v-if="erros.categoria"
+					severity="error"
+					:closable="false"
+				>
+					A categoria é obrigatória
+				</Message>
 			</div>
 
 			<div class="flex flex-col gap-2">
@@ -42,7 +66,15 @@
 					rows="3"
 					cols="20"
 					:maxlength="250"
+					:class="{ 'p-invalid': erros.descricao }"
 				/>
+				<Message
+					v-if="erros.descricao"
+					severity="error"
+					:closable="false"
+				>
+					A descrição é obrigatória
+				</Message>
 			</div>
 		</div>
 
@@ -70,6 +102,7 @@
 	import TextArea from "primevue/textarea"
 	import Select from "primevue/select"
 	import Button from "primevue/button"
+	import Message from "primevue/message"
 
 	const props = defineProps({
 		visivel: Boolean,
@@ -81,24 +114,64 @@
 
 	const dialogVisivel = ref(props.visivel)
 	const chamadoEditado = ref({})
+	const erros = ref({})
+
+	const limparErros = () => {
+		erros.value = {}
+	}
+
+	const limparChamado = () => {
+		chamadoEditado.value = {}
+	}
+
+	const inicializarChamado = () => {
+		chamadoEditado.value = { ...props.chamado }
+		limparErros()
+	}
+
+	const resetarFormulario = () => {
+		limparChamado()
+		limparErros()
+	}
+
+	const validarCampos = () => {
+		limparErros()
+
+		if (!chamadoEditado.value.nomeUsuario || chamadoEditado.value.nomeUsuario.trim() === "") {
+			erros.value.nomeUsuario = true
+		}
+
+		if (!chamadoEditado.value.usuario || chamadoEditado.value.usuario.trim() === "") {
+			erros.value.usuario = true
+		}
+
+		if (!chamadoEditado.value.categoria) {
+			erros.value.categoria = true
+		}
+
+		if (!chamadoEditado.value.descricao || chamadoEditado.value.descricao.trim() === "") {
+			erros.value.descricao = true
+		}
+
+		return Object.keys(erros.value).length === 0
+	}
 
 	watch(
 		() => props.visivel,
 		(novoValor) => {
 			dialogVisivel.value = novoValor
-			if (novoValor) {
-				chamadoEditado.value = { ...props.chamado }
-			} else {
-				chamadoEditado.value = {}
-			}
+			novoValor ? inicializarChamado() : resetarFormulario()
 		}
 	)
 
 	const fecharDialog = () => {
 		emits("update:visivel", false)
+		resetarFormulario()
 	}
 
 	const salvarChamado = () => {
+		if (!validarCampos()) return
+
 		emits("salvar", chamadoEditado.value)
 		fecharDialog()
 	}
